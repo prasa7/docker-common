@@ -25,12 +25,13 @@ if [[ -z "$MODULE_NAME" ]]; then
 fi
 
 # Export facter variables
-export FACTER_product_name=${MODULE_NAME}
+export FACTER_product_name='wso2am_runtime'
 export FACTER_product_version=${WSO2_SERVER_VERSION}
 export FACTER_product_profile=${WSO2_SERVER_PROFILE}
 export FACTER_environment=${WSO2_ENVIRONMENT}
 export FACTER_platform=${PLATFORM}
 export FACTER_vm_type=docker
+<<<<<<< HEAD
 export FACTER_use_hieradata=true
 export FACTER_pattern=pattern-${WSO2_DEPLOYMENT_PATTERN}
 
@@ -43,6 +44,22 @@ echo -e "\t- platform=${FACTER_platform}"
 echo -e "\t- vm_type=${FACTER_vm_type}"
 echo -e "\t- use_hieradata=${FACTER_use_hieradata}"
 echo -e "\t- pattern=${FACTER_pattern}"
+=======
+export FACTER_pattern=pattern-0
+export FACTER_use_hieradata=true
+
+echo "facters used: "
+echo "product_name=${FACTER_product_name}"
+echo "product_version=${FACTER_product_version}"
+echo "product_profile=${FACTER_product_profile}"
+echo "environment=${FACTER_environment}"
+echo "platform=${FACTER_platform}"
+echo "vm_type=${FACTER_vm_type}"
+echo "pattern=${FACTER_pattern}"
+echo "use_hieradata=${FACTER_use_hieradata}"
+
+echo "httpserver=${HTTP_PACK_SERVER}"
+>>>>>>> df146bf... Changing provisioning method.
 
 # Prepare Puppet
 mkdir -p /etc/puppet
@@ -59,6 +76,7 @@ wget -q -nv -rnH --level=0 -e robots=off --reject "index.html*" ${HTTP_PACK_SERV
 wget -q -nv -rnH --level=0 -e robots=off --reject "index.html*" ${HTTP_PACK_SERVER}/manifests/
 wget -q -nv -rnH --level=0 -e robots=off --reject "index.html*" ${HTTP_PACK_SERVER}/modules/wso2base/
 wget -q -nv -rnH --level=0 -e robots=off --reject "index.html*" ${HTTP_PACK_SERVER}/modules/${MODULE_NAME}/
+wget -q -nv -rnH --level=0 -e robots=off --reject "index.html*" ${HTTP_PACK_SERVER}/files/
 
 # Run Puppet agent in stand-alone mode
 echo "Running Puppet agent..."

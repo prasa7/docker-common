@@ -105,13 +105,24 @@ function validateNeededPacks() {
 # check if provided product environment exists in PUPPET_HOME
 validateProductEnvironment "${product_env}"
 
+<<<<<<< HEAD
 #check if provided deployment pattern exists in PUPPET_HOME
 validateDeploymentPattern "${module_name}" "${product_version}" "${product_env}" "${pattern_no}"
 
 # check if provided profile exists in PUPPET_HOME
 validateProfile "${module_name}" "${product_version}" "${product_profiles}" "${product_env}" "${pattern_no}"
+=======
+# check if provided product version exists in PUPPET_HOME
+#validateProductVersion "${module_name}" "${product_version}" "${product_env}"
+
+# check if provided platform exists in PUPPET_HOME
+#validatePlatform "${module_name}" "${product_version}" "${product_env}" "${platform}"
+
+# check if provided profile exists in PUPPET_HOME
+#validateProfile "${module_name}" "${product_version}" "${product_profiles}" "${product_env}" "${platform}"
+>>>>>>> df146bf... Changing provisioning method.
 
 # check if packs are copied to PUPPET_HOME
-validateNeededPacks "${module_name}" "${product_name}" "${product_version}"
+#validateNeededPacks "${module_name}" "${product_name}" "${product_version}"
 
 export file_location=${PUPPET_HOME}

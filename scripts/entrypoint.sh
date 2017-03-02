@@ -63,7 +63,7 @@ function main() {
   PRGDIR=$(dirname "$0")
   SCRIPT_PATH=$(cd "$PRGDIR"; pwd)
   export LOCAL_DOCKER_IP=$(ip route get 1 | awk '{print $NF;exit}')
-  SERVER_NAME="${WSO2_SERVER}-${WSO2_SERVER_VERSION}"
+  SERVER_NAME="wso2am-2.1.0"
   WSO2_ARTIFACTS_DIR='/mnt/wso2-artifacts'
   INSTALL_PATH="/mnt/${SERVER_NAME}"
   AXIS2_XML_FILE="${INSTALL_PATH}/repository/conf/axis2/axis2.xml"
@@ -73,14 +73,14 @@ function main() {
   if [[ $PLATFORM == "mesos" ]]; then
     # Each product instance in a cluster should have a unique installation dir due to an issue in Carbon registry core
     # In Mesos, local Docker IP is not unique across the cluster hence host IP is prefixed
-    UNIQUE_PATH="/mnt/${HOST}-${LOCAL_DOCKER_IP}"
+    UNIQUE_PATH="/mnt"
     # Replace localMemberHost with host IP so that it is reachable via containers in other hosts
     # This is needed for Hazelcast based clustering to work when bridge mode Docker networking is used (eg: Mesos with Marathon)
     replace_local_member_host $HOST $AXIS2_XML_FILE
     # Replace localMemberPort with dynamically generated port by Marathon which will be used for Hazelcast communication
     replace_local_member_port $PORT0 $AXIS2_XML_FILE
   else
-    UNIQUE_PATH="/mnt/${LOCAL_DOCKER_IP}"
+    UNIQUE_PATH="/mnt"
     # Replace localMemberHost with local Docker IP address
     # This is needed for Hazelcast based clustering to work when HOST mode Docker networking is used with an overlay network (eg: Kubernetes with flanneld)
     replace_local_member_host $LOCAL_DOCKER_IP $AXIS2_XML_FILE
@@ -89,8 +89,8 @@ function main() {
   echo "Creating directory ${UNIQUE_PATH}"
   mkdir -p $UNIQUE_PATH
   echo "Creating symlink [Target] ${INSTALL_PATH}, [Link] ${UNIQUE_PATH}/${SERVER_NAME}"
-  ln -s $INSTALL_PATH "${UNIQUE_PATH}/${SERVER_NAME}"
-  export CARBON_HOME="${UNIQUE_PATH}/${SERVER_NAME}"
+  #ln -s $INSTALL_PATH "${UNIQUE_PATH}/${SERVER_NAME}"
+  export CARBON_HOME="${UNIQUE_PATH}/wso2am-2.1.0"
   source /etc/profile.d/set_java_home.sh
 
   if [[ ! -z $KEY_STORE_PASSWORD ]]; then
@@ -130,5 +130,6 @@ function main() {
 
   echo "Starting ${SERVER_NAME} with [Startup Args] ${STARTUP_ARGS}, [CARBON_HOME] ${CARBON_HOME}"
   ${CARBON_HOME}/bin/wso2server.sh $STARTUP_ARGS
+  
 }
 main
