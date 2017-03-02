@@ -31,20 +31,6 @@ export FACTER_product_profile=${WSO2_SERVER_PROFILE}
 export FACTER_environment=${WSO2_ENVIRONMENT}
 export FACTER_platform=${PLATFORM}
 export FACTER_vm_type=docker
-<<<<<<< HEAD
-export FACTER_use_hieradata=true
-export FACTER_pattern=pattern-${WSO2_DEPLOYMENT_PATTERN}
-
-echo "Facters used: "
-echo -e "\t- product_name=${FACTER_product_name}"
-echo -e "\t- product_version=${FACTER_product_version}"
-echo -e "\t- product_profile=${FACTER_product_profile}"
-echo -e "\t- environment=${FACTER_environment}"
-echo -e "\t- platform=${FACTER_platform}"
-echo -e "\t- vm_type=${FACTER_vm_type}"
-echo -e "\t- use_hieradata=${FACTER_use_hieradata}"
-echo -e "\t- pattern=${FACTER_pattern}"
-=======
 export FACTER_pattern=pattern-0
 export FACTER_use_hieradata=true
 
@@ -59,7 +45,6 @@ echo "pattern=${FACTER_pattern}"
 echo "use_hieradata=${FACTER_use_hieradata}"
 
 echo "httpserver=${HTTP_PACK_SERVER}"
->>>>>>> df146bf... Changing provisioning method.
 
 # Prepare Puppet
 mkdir -p /etc/puppet
@@ -80,7 +65,8 @@ wget -q -nv -rnH --level=0 -e robots=off --reject "index.html*" ${HTTP_PACK_SERV
 
 # Run Puppet agent in stand-alone mode
 echo "Running Puppet agent..."
-puppet apply --hiera_config=/etc/puppet/hiera.yaml /etc/puppet/manifests/site.pp
+#puppet apply -e "include ${MODULE_NAME}" --hiera_config=/etc/puppet/hiera.yaml
+puppet apply /etc/puppet/manifests/site.pp --hiera_config=/etc/puppet/hiera.yaml
 
 # Cleanup
 echo "Cleaning up packages and files no longer required..."
